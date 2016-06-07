@@ -2,7 +2,7 @@
 #include <Ultrasonic.h>
 
 /*-----Constantes-----*/
-int receiver = 7; // pin 7 del arduino para el receptor IR
+int receiver = 3; // pin 3 del arduino para el receptor IR
 #define E1 10    // Habilitar Pin 10 para el motor 1(Enable1)
 #define E2 11   // Habilitar Pin 11 para el motor 2(Enable2)
 
@@ -32,7 +32,7 @@ void setup()
     
     
     
-    
+    attachInterrupt(1, IR,  HIGH);//interrupción pin 3 (IR pin Data)
     Serial.begin(9600);
     irrecv.enableIRIn(); // Iniciar el receptor 
    }
@@ -86,6 +86,8 @@ void loop()
      delay(400);                                // espera 400ms para que se logre ver la distancia en la consola
 }
 
+void IR()
+{
     if (irrecv.decode(&Codigo))
         {
         Serial.println(Codigo.value);
@@ -181,4 +183,4 @@ void loop()
       }
    digitalWrite(6, 1);
    digitalWrite(3,LOW);
-}﻿
+}
