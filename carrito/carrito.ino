@@ -29,9 +29,7 @@ void setup()
     pinMode(TRIGGER_PIN, OUTPUT);
     pinMode(receiver, INPUT);
     pinMode(ledPin, OUTPUT);
-    
-    
-    
+
     attachInterrupt(1, IR,  HIGH);//interrupción pin 3 (IR pin Data)
     Serial.begin(9600);
     irrecv.enableIRIn(); // Iniciar el receptor 
@@ -54,34 +52,17 @@ void loop()
         digitalWrite(6, 0);               // en bajo el pin 13
      }
   
-    if (cmMsec<= 70 && cmMsec >= 1)
+    if (cmMsec<= 25 && cmMsec >= 1)
     {
         digitalWrite(6, 1);                     // en alto el pin 6 si la distancia es menor a 10cm
         Serial.println("Alarma.......");         // envia la palabra Alarma por el puerto serial
            Serial.println("Obstaculo");
-    digitalWrite(E1, LOW);
-    digitalWrite(E2, LOW);
-    digitalWrite(I1, LOW);
-    digitalWrite(I2, LOW);
-    digitalWrite(I3, LOW);
-    digitalWrite(I4, LOW);
+    alto();
     delay(2000);
-    digitalWrite(E1, LOW);
-    digitalWrite(E2, LOW);
-    digitalWrite(E1, HIGH);
-    digitalWrite(E2, HIGH);
-    digitalWrite(I1, LOW);
-    digitalWrite(I2, LOW);
-    digitalWrite(I3, HIGH);
-    digitalWrite(I4, LOW);
+    stopmotor1();
     digitalWrite(6, 1);
     delay(4000);
-    digitalWrite(E1, LOW);
-    digitalWrite(E2, LOW);
-    digitalWrite(I1, LOW);
-    digitalWrite(I2, LOW);
-    digitalWrite(I3, LOW);
-    digitalWrite(I4, LOW);
+    adelante();
      }
      delay(400);                                // espera 400ms para que se logre ver la distancia en la consola
 }
@@ -96,7 +77,48 @@ void IR()
         } 
     if(Codigo.value== 2575714394)//flecha arriva  
       {
-      //Adelante
+      adelante();
+      }
+   if(Codigo.value== 476746140)//flecha abajo
+      {
+      atras();
+      }
+    if(Codigo.value==3398796026)//STOP
+      {
+       alto();
+      }
+   if(Codigo.value==1320813602)//STOP motor 1
+      {
+      stopmotor1();
+      }
+      
+    if(Codigo.value==1587577092)//STOP motor 2
+      {
+      stopmotor2();
+      }
+    if(Codigo.value==3189035290)
+       {
+       alto();
+       analogWrite(E1,155);//low spedd
+       analogWrite(E2,155);//
+       adelante();
+       
+       }
+      
+        if(Codigo.value==510371368)
+       {
+         
+       alto();
+       analogWrite(E1,255);//full speed
+       analogWrite(E2,255);//
+       adelante();
+      
+      }
+   digitalWrite(6, 1);
+   digitalWrite(3,LOW);
+}
+ void adelante(){
+  //Adelante
       digitalWrite(E1, LOW);
       digitalWrite(E2, LOW);
       digitalWrite(E1, HIGH);
@@ -105,10 +127,9 @@ void IR()
       digitalWrite(I2, LOW);
       digitalWrite(I3, HIGH);
       digitalWrite(I4, LOW);
-      }
-   if(Codigo.value== 476746140)//flecha abajo
-      {
-      //Atras
+  }
+  void atras(){
+    //Atras
       digitalWrite(E1, LOW);
       digitalWrite(E2, LOW);
       digitalWrite(E1, HIGH);
@@ -117,70 +138,29 @@ void IR()
       digitalWrite(I2, HIGH);
       digitalWrite(I3, LOW);
       digitalWrite(I4, HIGH);
-      }
-    if(Codigo.value==3398796026)//STOP
-      {
-        //STOP
+    }
+void alto(){
+   //STOP
       digitalWrite(E1, LOW);
       digitalWrite(E2, LOW);
-      
       digitalWrite(I1, LOW);
       digitalWrite(I2, LOW);
       digitalWrite(I3, LOW);
       digitalWrite(I4, LOW);
-      }
-   if(Codigo.value==1320813602)//STOP motor 1
-      {
+  }  
+void stopmotor1(){
       digitalWrite(E2, HIGH);
       digitalWrite(E1, LOW);
-      
       digitalWrite(I1, LOW);
       digitalWrite(I2, LOW);
       digitalWrite(I3, HIGH);
       digitalWrite(I4, LOW);
-      }
-      
-    if(Codigo.value==1587577092)//STOP motor 2
-      {
+   }
+void stopmotor2(){
       digitalWrite(E1, HIGH);
       digitalWrite(E2, LOW);
-      
       digitalWrite(I3, LOW);
       digitalWrite(I4, LOW);
       digitalWrite(I1, HIGH);
       digitalWrite(I2, LOW);
-      }
-    if(Codigo.value==3189035290)
-       {
-       digitalWrite(E1, LOW);
-       digitalWrite(E2, LOW);
-      
-       analogWrite(E1,150);//low spedd
-       analogWrite(E2,150);//
-       digitalWrite(E1,HIGH );
-       digitalWrite(E2,HIGH );
-       digitalWrite(I1, HIGH);
-       digitalWrite(I2, LOW);
-       digitalWrite(I3, HIGH);
-       digitalWrite(I4, LOW);
-       
-       }
-      
-        if(Codigo.value==510371368)
-       {
-         
-       digitalWrite(E1, LOW);
-       digitalWrite(E2, LOW);
-       analogWrite(E1,255);//full speed
-       analogWrite(E2,255);//
-       digitalWrite(E1,HIGH );
-       digitalWrite(E2,HIGH );
-       digitalWrite(I1, HIGH);
-       digitalWrite(I2, LOW);
-       digitalWrite(I3, HIGH);
-       digitalWrite(I4, LOW);
-      
-      }
-   digitalWrite(6, 1);
-   digitalWrite(3,LOW);
-}
+  }    
