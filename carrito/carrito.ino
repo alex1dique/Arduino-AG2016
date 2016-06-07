@@ -14,28 +14,28 @@ int receiver = 3; // pin 3 del arduino para el receptor IR
 #define TRIGGER_PIN  5//Pin 5 Trig ultrasonido
 #define ECHO_PIN     4//pin 4 Echo ultrasonido
 
-int ledPin = 6;
+int ledPin = 6;//pin del led 
 
 IRrecv irrecv(receiver);// creando instancia para 'irrecv'
 decode_results Codigo;            // creando instancia para 'decode_results'
-Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
+Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);//manda los pines del echo ty trig
 void setup()
     {
-    for(int i=8;i<=13;i++) 
+    for(int i=8;i<=13;i++)//for pines del 8 al 13 como salida 
     {
     pinMode(i, OUTPUT);  
     }
     pinMode(ECHO_PIN, INPUT);    
     pinMode(TRIGGER_PIN, OUTPUT);
-    pinMode(receiver, INPUT);
+    pinMode(receiver, INPUT);//pin del receiber como imput
     pinMode(ledPin, OUTPUT);
 
     attachInterrupt(1, IR,  HIGH);//interrupción pin 3 (IR pin Data)
-    Serial.begin(9600);
+    Serial.begin(9600);//velocidad 
     irrecv.enableIRIn(); // Iniciar el receptor 
    }
 
-void loop()
+void loop()//bucle infinito loop
 {
     float cmMsec;
     long microsec = ultrasonic.timing();
@@ -57,17 +57,17 @@ void loop()
         digitalWrite(6, 1);                     // en alto el pin 6 si la distancia es menor a 10cm
         Serial.println("Alarma.......");         // envia la palabra Alarma por el puerto serial
            Serial.println("Obstaculo");
-    alto();
-    delay(2000);
-    stopmotor1();
-    digitalWrite(6, 1);
-    delay(4000);
-    adelante();
+    alto();//llamando funcion alto 
+    delay(2000);//espera 2 seg
+    stopmotor1();//funcion para girar 
+    digitalWrite(6, 1);//enciende el led 
+    delay(4000);//espera 4 seg
+    adelante();//llamando funcion adelante
      }
      delay(400);                                // espera 400ms para que se logre ver la distancia en la consola
 }
 
-void IR()
+void IR()//funcion q se ejecuta al disparar la interrupcion
 {
     if (irrecv.decode(&Codigo))
         {
@@ -77,24 +77,24 @@ void IR()
         } 
     if(Codigo.value== 2575714394)//flecha arriva  
       {
-      adelante();
+      adelante();//llama a func adelante
       }
    if(Codigo.value== 476746140)//flecha abajo
       {
-      atras();
+      atras();//llama a func atras
       }
     if(Codigo.value==3398796026)//STOP
       {
-       alto();
+       alto();//llama a func alto 
       }
    if(Codigo.value==1320813602)//STOP motor 1
       {
-      stopmotor1();
+      stopmotor1();//llama a func stop motor 1
       }
       
     if(Codigo.value==1587577092)//STOP motor 2
       {
-      stopmotor2();
+      stopmotor2();//llama a stop motor 2
       }
     if(Codigo.value==3189035290)
        {
@@ -115,8 +115,9 @@ void IR()
       
       }
    digitalWrite(6, 1);
-   digitalWrite(3,LOW);
+   digitalWrite(3,LOW);//manda Low al pin 3 lo q nos saca de la interrupcion ya q la interrupcion se dispara con HIGH
 }
+//funciones de control del carrito
  void adelante(){
   //Adelante
       digitalWrite(E1, LOW);
