@@ -13,7 +13,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  for(angulo = 0; angulo < 180; angulo += 1) 
+  for(angulo = 0; angulo <= 180; angulo += 1) 
   {                          
     myservo.write(angulo);   
     if(angulo==45) {
@@ -30,7 +30,7 @@ void loop() {
       
     digitalWrite(12,HIGH);
     }
-    if(angulo==179) {
+    if(angulo==180) {
     Serial.print('angulo:');
       
     Serial.print(angulo);
